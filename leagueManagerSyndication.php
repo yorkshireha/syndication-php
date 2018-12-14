@@ -37,6 +37,7 @@ class LeagueManagerTables {
     *                to display all divisions for the league
     */
    function LeagueManagerTables($leagues) {
+      $this->utils = new LeagueManagerUtils();
       $this->leagues = $leagues;
       $this->url = "http://yorkshireha.org.uk/e107_plugins/league_manager/data/tables_";
       //$this->url = "../league_manager/data/tables_";
@@ -168,6 +169,12 @@ class LeagueManagerTables {
       $text = "";
       return $text;
    }
+
+   function enableDebug() {
+      $this->utils->enableDebug();
+      $this->utils->debug("debug enabled");
+      $this->utils->debug("JSON base URL $this->url");
+   }
 }
 
 /**
@@ -184,6 +191,7 @@ class LeagueManagerFixtures {
     * @param $clubId Defines the club ID you want to be displayed
     */
    function LeagueManagerFixtures($clubId) {
+      $this->utils = new LeagueManagerUtils();
       $this->clubId = $clubId;
       $this->url = "http://localhost/yorkshireha.org.uk/e107_plugins/league_manager/data/fixtures_".$clubId.".json";
       //$this->url = "../league_manager/data/fixtures_".$clubId.".json";
@@ -243,6 +251,29 @@ class LeagueManagerFixtures {
          $text .= "</div>\n";
       }
       return $text;
+   }
+
+   function enableDebug() {
+      $this->utils->enableDebug();
+      $this->utils->debug("debug enabled");
+      $this->utils->debug("JSON file URL $this->url");
+   }
+}
+
+/**
+ * A collection of utilities
+ */
+class LeagueManagerUtils {
+   var $debugEnabled = false;
+
+   function enableDebug() {
+      $this->debugEnabled = true;
+   }
+
+   function debug($msg) {
+      if ($this->debugEnabled) {
+         echo "<pre>DEBUG: $msg</pre>";
+      }
    }
 }
 ?>
