@@ -34,6 +34,7 @@
    if (!empty($_GET)) {
       $clubId = $_GET["clubid"];
       $year = $_GET["year"];
+      $debug = isset($_GET["debug"]);
    }
 
    echo "
@@ -81,6 +82,9 @@
    		'dateFormat'    => 'D, d M Y'
    	);
    	$fixtures = new LeagueManagerFixtures($clubId);
+   	if ($debug) {
+   	   $fixtures->enableDebug();
+   	}
    	echo "<style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}</style>"; // Some very basic CSS
    	echo $fixtures->getHTML($options);
    }
