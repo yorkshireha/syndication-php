@@ -198,7 +198,7 @@ class LeagueManagerFixtures {
    function LeagueManagerFixtures($clubId) {
       $this->utils = new LeagueManagerUtils();
       $this->clubId = $clubId;
-      $this->url = "http://localhost/yorkshireha.org.uk/e107_plugins/league_manager/data/fixtures_".$clubId.".json";
+      $this->url = "http://yorkshireha.org.uk/e107_plugins/league_manager/data/fixtures_".$clubId.".json";
       //$this->url = "../league_manager/data/fixtures_".$clubId.".json";
    }
 
