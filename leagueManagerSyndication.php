@@ -1,8 +1,8 @@
 ﻿<?php
 /**
- * ************************
- * Do not change this file!
- * ************************
+ * *************************************************************************************************
+ * If you modify this file, consider raising a PR at https://github.com/yorkshireha/syndication-php/
+ * *************************************************************************************************
  */
 
 /**
@@ -62,9 +62,12 @@ class LeagueManagerTables {
     * @private
     */
    function showLeague($leagueid, $divisions) {
+      $url = $this->url.$leagueid.".json";
       $text = "<p>There was a problem retrieving data for league ID $leagueid.</p>";
-      if (file_exists($this->url.$leagueid.".json")) {
-         $data = json_decode(file_get_contents($this->url.$leagueid.".json"), true);
+      $this->utils->debug("Fetching $url");
+      if ($this->utils->urlExists($url)) {
+         $jsonAsString = file_get_contents($this->url.$leagueid.".json");
+         $data = json_decode($jsonAsString, true);
          $text = "<table class='leagman_league'>\n";
          $text .= $this->getLeagueHead($data["league"]);
          foreach($data["league"]["divisions"] as $division) {
@@ -78,6 +81,8 @@ class LeagueManagerTables {
          }
          $text .= "</table>\n";
          $text .= $this->getLeagueFoot($data["league"]);
+      } else {
+         $this->utils->debug("File does not exist");
       }
       return $text;
    }
@@ -193,7 +198,7 @@ class LeagueManagerFixtures {
    function LeagueManagerFixtures($clubId) {
       $this->utils = new LeagueManagerUtils();
       $this->clubId = $clubId;
-      $this->url = "http://localhost/yorkshireha.org.uk/e107_plugins/league_manager/data/fixtures_".$clubId.".json";
+      $this->url = "http://yorkshireha.org.uk/e107_plugins/league_manager/data/fixtures_".$clubId.".json";
       //$this->url = "../league_manager/data/fixtures_".$clubId.".json";
    }
 
@@ -207,7 +212,7 @@ class LeagueManagerFixtures {
     */
    function getHTML($options=null) {
       $text = "<p>There was a problem retrieving data for club ID $this->clubId.</p>";
-      if (file_exists($this->url)) {
+      if ($this->utils->urlExists($this->url)) {
          $data = json_decode(file_get_contents($this->url), true);
          $curDate = "";
          $text = "<div class='leagman'>\n";
@@ -249,6 +254,8 @@ class LeagueManagerFixtures {
          }
          $text .= "</table>\n";
          $text .= "</div>\n";
+      } else {
+         $this->utils->debug("File does not exist");
       }
       return $text;
    }
@@ -265,6 +272,11 @@ class LeagueManagerFixtures {
  */
 class LeagueManagerUtils {
    var $debugEnabled = false;
+
+   function urlExists($url){
+      $headers=get_headers($url);
+      return stripos($headers[0],"200 OK") ? true : false;
+   }
 
    function enableDebug() {
       $this->debugEnabled = true;
