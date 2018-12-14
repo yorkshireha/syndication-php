@@ -34,6 +34,7 @@
    if (!empty($_GET)) {
       $league = $_GET["league"];
       $divisions = $_GET["divisions"];
+      $debug = isset($_GET["debug"]);
    }
 
    echo "
@@ -76,6 +77,9 @@
    		$league => $divisionsArray
    	);
    	$tables = new LeagueManagerTables($myleagues);
+   	if ($debug) {
+   	   $tables->enableDebug();
+   	}
    	echo "<style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}</style>"; // Some very basic CSS
    	echo $tables->getHTML();
    }
