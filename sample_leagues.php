@@ -72,7 +72,7 @@
       <h2>Fixtures</h2>";
 
    	require_once('leagueManagerSyndication.php');
-   	$divisionsArray = strlen($divisions) ? array($divisions) : array();
+   	$divisionsArray = strlen($divisions) ? str_getcsv($divisions) : array();
    	$myleagues = array(
    		$league => $divisionsArray
    	);
