@@ -66,7 +66,7 @@
             '$league' => array($divisions)
       	);
       	\$tables = new LeagueManagerTables(\$myleagues);
-      	echo \"&lt;style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}&lt;/style>\"; // Some very basic CSS
+      	echo \"&lt;style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}tr.leagman_division_head{background-color:#ddd;}&lt;/style>\"; // Some very basic CSS
       	echo \$tables->getHTML();
       </pre>
       <h2>Fixtures</h2>";
@@ -78,9 +78,11 @@
    	);
    	$tables = new LeagueManagerTables($myleagues);
    	if ($debug) {
+         error_reporting(E_ALL);
+         ini_set('display_errors', 1);
    	   $tables->enableDebug();
    	}
-   	echo "<style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}</style>"; // Some very basic CSS
+   	echo "<style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}tr.leagman_division_head{background-color:#ddd;}</style>"; // Some very basic CSS
    	echo $tables->getHTML();
    }
 ?>

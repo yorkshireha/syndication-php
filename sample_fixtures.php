@@ -69,7 +69,7 @@
       		'dateFormat'    => 'D, d M Y'
       	);
       	\$fixtures = new LeagueManagerFixtures(\$clubId);
-      	echo \"&lt;style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}&lt;/style>\"; // Some very basic CSS
+      	echo \"&lt;style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}tr.date{background-color:#ddd;}&lt;/style>\"; // Some very basic CSS
       	echo \$fixtures->getHTML(\$options);
       </pre>
       <h2>Fixtures</h2>";
@@ -83,9 +83,11 @@
    	);
    	$fixtures = new LeagueManagerFixtures($clubId);
    	if ($debug) {
-   	   $fixtures->enableDebug();
+         error_reporting(E_ALL);
+         ini_set('display_errors', 1);
+         $fixtures->enableDebug();
    	}
-   	echo "<style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}</style>"; // Some very basic CSS
+   	echo "<style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}tr.date{background-color:#ddd;}</style>"; // Some very basic CSS
    	echo $fixtures->getHTML($options);
    }
 ?>
