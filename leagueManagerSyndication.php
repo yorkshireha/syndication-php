@@ -238,7 +238,7 @@ class LeagueManagerFixtures {
          	$processThisFixture = $processThisFixture && (!isset($options['teams']) || (in_array($fixture['homeTeam'], $options['teams']) || in_array($fixture['awayTeam'], $options['teams'])));
             if ($processThisFixture) {
                if ($fixture['date'] != $curDate) {
-                  $text .= "<tr class='date'><td class='forumheader3' colspan='8'>".date($dateFormat, $fixture['date'])."</td></tr>";
+                  $text .= "<tr class='date'><td class='forumheader3' colspan='8'>".gmdate($dateFormat, $fixture['date'])."</td></tr>";
                   $curDate = $fixture['date'];
                }
                $text .= "<tr class='".($zebra ? "even" : "odd")."'>";
