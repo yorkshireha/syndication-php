@@ -34,6 +34,7 @@
    if (!empty($_GET)) {
       $league = $_GET["league"];
       $divisions = $_GET["divisions"];
+      $debug = isset($_GET["debug"]);
    }
 
    echo "
@@ -65,18 +66,23 @@
             '$league' => array($divisions)
       	);
       	\$tables = new LeagueManagerTables(\$myleagues);
-      	echo \"&lt;style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}&lt;/style>\"; // Some very basic CSS
+      	echo \"&lt;style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}tr.leagman_division_head{background-color:#ddd;}&lt;/style>\"; // Some very basic CSS
       	echo \$tables->getHTML();
       </pre>
       <h2>Fixtures</h2>";
 
    	require_once('leagueManagerSyndication.php');
-   	$divisionsArray = strlen($divisions) ? array($divisions) : array();
+   	$divisionsArray = strlen($divisions) ? str_getcsv($divisions) : array();
    	$myleagues = array(
    		$league => $divisionsArray
    	);
    	$tables = new LeagueManagerTables($myleagues);
-   	echo "<style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}</style>"; // Some very basic CSS
+   	if ($debug) {
+         error_reporting(E_ALL);
+         ini_set('display_errors', 1);
+   	   $tables->enableDebug();
+   	}
+   	echo "<style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}tr.leagman_division_head{background-color:#ddd;}</style>"; // Some very basic CSS
    	echo $tables->getHTML();
    }
 ?>

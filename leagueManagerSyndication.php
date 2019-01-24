@@ -1,8 +1,8 @@
 ﻿<?php
 /**
- * ************************
- * Do not change this file!
- * ************************
+ * *************************************************************************************************
+ * If you modify this file, consider raising a PR at https://github.com/yorkshireha/syndication-php/
+ * *************************************************************************************************
  */
 
 /**
@@ -37,9 +37,15 @@ class LeagueManagerTables {
     *                to display all divisions for the league
     */
    function LeagueManagerTables($leagues) {
+      $this->utils = new LeagueManagerUtils();
       $this->leagues = $leagues;
-      $this->url = "http://yorkshireha.org.uk/e107_plugins/league_manager/data/tables_";
-      //$this->url = "../league_manager/data/tables_";
+      if ($_SERVER ["HTTP_HOST"] == "yorkshireha.org.uk") {
+         $this->url = "../league_manager/data/tables_";
+         $this->localSite = true;
+      } else {
+         $this->url = "http://yorkshireha.org.uk/e107_plugins/league_manager/data/tables_";
+         $this->localSite = false;
+      }
    }
 
    /**
@@ -61,9 +67,12 @@ class LeagueManagerTables {
     * @private
     */
    function showLeague($leagueid, $divisions) {
+      $url = $this->url.$leagueid.".json";
       $text = "<p>There was a problem retrieving data for league ID $leagueid.</p>";
-      if (file_exists($this->url.$leagueid.".json")) {
-         $data = json_decode(file_get_contents($this->url.$leagueid.".json"), true);
+      $this->utils->debug("Fetching", $url);
+      if ($this->localSite || $this->utils->urlExists($url)) {
+         $jsonAsString = file_get_contents($this->url.$leagueid.".json");
+         $data = json_decode($jsonAsString, true);
          $text = "<table class='leagman_league'>\n";
          $text .= $this->getLeagueHead($data["league"]);
          foreach($data["league"]["divisions"] as $division) {
@@ -77,6 +86,8 @@ class LeagueManagerTables {
          }
          $text .= "</table>\n";
          $text .= $this->getLeagueFoot($data["league"]);
+      } else {
+         $this->utils->debug("INFO", "File does not exist");
       }
       return $text;
    }
@@ -168,6 +179,12 @@ class LeagueManagerTables {
       $text = "";
       return $text;
    }
+
+   function enableDebug() {
+      $this->utils->enableDebug();
+      $this->utils->debug("INFO", "debug enabled");
+      $this->utils->debug("JSON base URL", $this->url);
+   }
 }
 
 /**
@@ -184,9 +201,15 @@ class LeagueManagerFixtures {
     * @param $clubId Defines the club ID you want to be displayed
     */
    function LeagueManagerFixtures($clubId) {
+      $this->utils = new LeagueManagerUtils();
       $this->clubId = $clubId;
-      $this->url = "http://localhost/yorkshireha.org.uk/e107_plugins/league_manager/data/fixtures_".$clubId.".json";
-      //$this->url = "../league_manager/data/fixtures_".$clubId.".json";
+      if ($_SERVER ["HTTP_HOST"] == "yorkshireha.org.uk") {
+         $this->url = "../league_manager/data/fixtures_".$clubId.".json";
+         $this->localSite = true;
+      } else {
+         $this->url = "http://yorkshireha.org.uk/e107_plugins/league_manager/data/fixtures_".$clubId.".json";
+         $this->localSite = false;
+      }
    }
 
    /**
@@ -199,7 +222,7 @@ class LeagueManagerFixtures {
     */
    function getHTML($options=null) {
       $text = "<p>There was a problem retrieving data for club ID $this->clubId.</p>";
-      if (file_exists($this->url)) {
+      if ($this->localSite || $this->utils->urlExists($this->url)) {
          $data = json_decode(file_get_contents($this->url), true);
          $curDate = "";
          $text = "<div class='leagman'>\n";
@@ -215,7 +238,7 @@ class LeagueManagerFixtures {
          	$processThisFixture = $processThisFixture && (!isset($options['teams']) || (in_array($fixture['homeTeam'], $options['teams']) || in_array($fixture['awayTeam'], $options['teams'])));
             if ($processThisFixture) {
                if ($fixture['date'] != $curDate) {
-                  $text .= "<tr class='date'><td class='forumheader3' colspan='8'>".date($dateFormat, $fixture['date'])."</td></tr>";
+                  $text .= "<tr class='date'><td class='forumheader3' colspan='8'>".gmdate($dateFormat, $fixture['date'])."</td></tr>";
                   $curDate = $fixture['date'];
                }
                $text .= "<tr class='".($zebra ? "even" : "odd")."'>";
@@ -241,8 +264,44 @@ class LeagueManagerFixtures {
          }
          $text .= "</table>\n";
          $text .= "</div>\n";
+      } else {
+         $this->utils->debug("INFO", "File does not exist");
       }
+      $this->utils->debug("Done", "");
       return $text;
+   }
+
+   function enableDebug() {
+      $this->utils->enableDebug();
+      $this->utils->debug("INFO", "debug enabled");
+      $this->utils->debug("JSON file URL", $this->url);
+   }
+}
+
+/**
+ * A collection of utilities
+ */
+class LeagueManagerUtils {
+   var $debugEnabled = false;
+
+   function urlExists($url){
+      $this->debug("url", $url);
+      $headers = get_headers($url);
+      $this->debug("headers", $headers);
+      return true;
+      return stripos($headers[0], "200") ? true : false;
+   }
+
+   function enableDebug() {
+      $this->debugEnabled = true;
+   }
+
+   function debug($title, $msg) {
+      if ($this->debugEnabled) {
+         echo "<pre>$title<br/>";
+         var_dump($msg);
+         echo "</pre>";
+      }
    }
 }
 ?>
