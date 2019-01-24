@@ -49,7 +49,7 @@
          <div class='row'>
             <label for='year'>Year</label>
             <input type='text' name='year' id='year' value='$year'>
-            <span>Fixtures for the season begining with this year are shown, starting from 1st September</span>
+            <span>Fixtures for the season begining with this year are shown, starting from 1st August</span>
          </div>
          <div class='row'>
             <input type='submit' value='Show fixtures'>
@@ -64,7 +64,7 @@
       	require_once('leagueManagerSyndication.php');
       	\$options = array(
       		'includeScores' => true,
-      		'startDate'     => mktime(0,0,0,9,01,$year),
+      		'startDate'     => mktime(0,0,0,8,01,$year),
       		'daysAhead'     => 365,
       		'dateFormat'    => 'D, d M Y'
       	);
@@ -77,7 +77,7 @@
    	require_once('leagueManagerSyndication.php');
    	$options = array(
    		'includeScores' => true,
-   		'startDate'     => mktime(0,0,0,9,01,$year),
+   		'startDate'     => mktime(0,0,0,8,01,$year),
    		'daysAhead'     => 365,
    		'dateFormat'    => 'D, d M Y'
    	);
