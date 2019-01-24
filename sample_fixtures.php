@@ -49,7 +49,7 @@
          <div class='row'>
             <label for='year'>Year</label>
             <input type='text' name='year' id='year' value='$year'>
-            <span>Fixtures for the season begining with this year are shown, starting from 1st September</span>
+            <span>Fixtures for the season begining with this year are shown, starting from 1st August</span>
          </div>
          <div class='row'>
             <input type='submit' value='Show fixtures'>
@@ -64,12 +64,12 @@
       	require_once('leagueManagerSyndication.php');
       	\$options = array(
       		'includeScores' => true,
-      		'startDate'     => mktime(0,0,0,9,01,$year),
+      		'startDate'     => mktime(0,0,0,8,01,$year),
       		'daysAhead'     => 365,
       		'dateFormat'    => 'D, d M Y'
       	);
       	\$fixtures = new LeagueManagerFixtures(\$clubId);
-      	echo \"&lt;style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}&lt;/style>\"; // Some very basic CSS
+      	echo \"&lt;style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}tr.date{background-color:#ddd;}&lt;/style>\"; // Some very basic CSS
       	echo \$fixtures->getHTML(\$options);
       </pre>
       <h2>Fixtures</h2>";
@@ -77,15 +77,17 @@
    	require_once('leagueManagerSyndication.php');
    	$options = array(
    		'includeScores' => true,
-   		'startDate'     => mktime(0,0,0,9,01,$year),
+   		'startDate'     => mktime(0,0,0,8,01,$year),
    		'daysAhead'     => 365,
    		'dateFormat'    => 'D, d M Y'
    	);
    	$fixtures = new LeagueManagerFixtures($clubId);
    	if ($debug) {
-   	   $fixtures->enableDebug();
+         error_reporting(E_ALL);
+         ini_set('display_errors', 1);
+         $fixtures->enableDebug();
    	}
-   	echo "<style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}</style>"; // Some very basic CSS
+   	echo "<style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}tr.date{background-color:#ddd;}</style>"; // Some very basic CSS
    	echo $fixtures->getHTML($options);
    }
 ?>
