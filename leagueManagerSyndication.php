@@ -70,7 +70,7 @@ class LeagueManagerTables {
       $url = $this->url.$leagueid.".json";
       $text = "<p>There was a problem retrieving data for league ID $leagueid.</p>";
       $this->utils->debug("Fetching", $url);
-      if ($this->utils->urlExists($url)) {
+      if ($this->localSite || $this->utils->urlExists($url)) {
          $jsonAsString = file_get_contents($this->url.$leagueid.".json");
          $data = json_decode($jsonAsString, true);
          $text = "<table class='leagman_league'>\n";
@@ -204,7 +204,7 @@ class LeagueManagerFixtures {
       $this->utils = new LeagueManagerUtils();
       $this->clubId = $clubId;
       if ($_SERVER ["HTTP_HOST"] == "yorkshireha.org.uk") {
-         $this->url = "./fixtures_".$clubId.".json";
+         $this->url = "../league_manager/data/fixtures_".$clubId.".json";
          $this->localSite = true;
       } else {
          $this->url = "http://yorkshireha.org.uk/e107_plugins/league_manager/data/fixtures_".$clubId.".json";
@@ -222,7 +222,7 @@ class LeagueManagerFixtures {
     */
    function getHTML($options=null) {
       $text = "<p>There was a problem retrieving data for club ID $this->clubId.</p>";
-      if ($this->utils->urlExists($this->url)) {
+      if ($this->localSite || $this->utils->urlExists($this->url)) {
          $data = json_decode(file_get_contents($this->url), true);
          $curDate = "";
          $text = "<div class='leagman'>\n";
