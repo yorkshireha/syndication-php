@@ -39,7 +39,7 @@ class LeagueManagerTables {
    function LeagueManagerTables($leagues) {
       $this->utils = new LeagueManagerUtils();
       $this->leagues = $leagues;
-      if ($_SERVER ["HTTP_HOST"] == "yorkshireha.org.uk") {
+      if ($this->utils->isYHASite()) {
          $this->url = "../league_manager/data/tables_";
          $this->localSite = true;
       } else {
@@ -203,7 +203,7 @@ class LeagueManagerFixtures {
    function LeagueManagerFixtures($clubId) {
       $this->utils = new LeagueManagerUtils();
       $this->clubId = $clubId;
-      if ($_SERVER ["HTTP_HOST"] == "yorkshireha.org.uk") {
+      if ($this->utils->isYHASite()) {
          $this->url = "../league_manager/data/fixtures_".$clubId.".json";
          $this->localSite = true;
       } else {
@@ -283,6 +283,10 @@ class LeagueManagerFixtures {
  */
 class LeagueManagerUtils {
    var $debugEnabled = false;
+
+   function isYHASite() {
+      return strpos($_SERVER ["HTTP_HOST"], "yorkshireha.org.uk") !== false;
+   }
 
    function urlExists($url){
       $this->debug("url", $url);
