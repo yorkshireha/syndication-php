@@ -68,7 +68,7 @@
       		'daysAhead'     => 365,
       		'dateFormat'    => 'D, d M Y'
       	);
-      	\$fixtures = new LeagueManagerFixtures(\$clubId);
+      	\$fixtures = new LeagueManagerFixtures($clubId);
       	echo \"&lt;style>table{width:100%;}th,td{padding:5px;border:1px solid #aaa;}tr.date{background-color:#ddd;}&lt;/style>\"; // Some very basic CSS
       	echo \$fixtures->getHTML(\$options);
       </pre>
